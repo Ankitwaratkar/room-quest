@@ -1,9 +1,10 @@
 import React from 'react'
-import Hero from '../../components/guest/Hero'
-import Features from '../../components/guest/Features'
-import About from '../../components/guest/About'
-import Reviews from '../../components/guest/Reviews'
+import Hero from '../../components/Hero'
+import Features from '../../components/Features'
 import Footer from '../../components/Footer'
+import Reviews from '../../components/Reviews'
+import About from '../../components/About/About'
+
 
 const Home = () => {
     return (

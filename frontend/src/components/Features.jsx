@@ -1,7 +1,7 @@
 import React from 'react'
-import feature1 from '../../assets/home/features/virtual-room-exploration.png';
-import feature2 from '../../assets/home/features/flexible-lease-option.png';
-import feature3 from '../../assets/home/features/verified-listings.png';
+import feature1 from '../assets/features/f1.png';
+import feature2 from '../assets/features/f2.png';
+import feature3 from '../assets/features/f3.png';
 
 const Features = () => {
 

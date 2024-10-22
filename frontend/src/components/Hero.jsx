@@ -1,11 +1,11 @@
 import React from 'react';
-import name from '../../assets/common/logo.png';
+import logo from '../assets/logo.png';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
-import carousel1 from "../../assets/home/carousels/carousel1.png";
-import carousel2 from "../../assets/home/carousels/carousel2.avif";
-import carousel3 from "../../assets/home/carousels/carousel3.jpg";
-import carousel4 from "../../assets/home/carousels/carousel4.avif";
+import carousel1 from "../assets/carousels/carousel1.png";
+import carousel2 from "../assets/carousels/carousel2.avif";
+import carousel3 from "../assets/carousels/carousel3.jpg";
+import carousel4 from "../assets/carousels/carousel4.avif";
 
 // Import Swiper styles
 import 'swiper/css';
@@ -23,7 +23,7 @@ const Hero = () => {
                 <div className="w-full md:w-1/2 flex flex-col justify-center items-center p-8">
                     <h1 className="text-5xl font-extrabold text-pink-300 mb-4">Welcome to,
                         <br />
-                        <img src={name} alt="Room Quest" />
+                        <img src={logo} alt="Room Quest" />
                     </h1>
                     <p className="text-[#d282a6] text-xl mb-6 font-bold">
                         Discover the perfect room, flat, or roommate for your needs. <br />We also offer mess services for students.<br /> Book your space with us now!
