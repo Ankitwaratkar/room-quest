@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import profile from '../../../backend/database/1727599451698-space-venture.png';
+// import profile from '../../../backend/database/1727599451698-space-venture.png';
 import { FaBarsStaggered } from "react-icons/fa6";
 import { GrClose } from "react-icons/gr";
-import logo from '../../assets/common/logo.png';
-import AddMenu from '../../pages/mess/AddMenu';
+import logo from '../../assets/logo.png';
+// import AddMenu from '../../pages/mess/AddMenu';
 
 const links = [
     { href: '/multi-mess-manager-home', label: 'Home' },
@@ -78,7 +78,7 @@ const MessNav = () => {
                                         <span className="sr-only">Open user menu</span>
                                         <img
                                             className="h-8 w-8 rounded-full"
-                                            src={profile}
+                                            src=""
                                             alt="Profile"
                                         />
                                     </button>
@@ -121,7 +121,7 @@ const MessNav = () => {
             </nav>
 
             {/* Conditionally render AddMenu */}
-            {showAddMenu && <AddMenu />}
+            {/* {showAddMenu && <AddMenu />} */}
         </>
     );
 };

@@ -1,16 +1,16 @@
 import React from 'react'
-import ResidencyDashboard from '../../components/recidencies/ResidencyDashboard'
-import Gallery from '../../components/recidencies/Gallery'
-import Services from '../../components/recidencies/Services'
-import About from '../../components/recidencies/About'
+import ResidencyDashboard from '../../components/Dashboard/ResidencyDashboard'
+import ResidencyGallery from '../../components/Gallery/ResidencyGallery'
+import ReasidencyService from '../../components/Services/ReasidencyService'
+import ResidencyAbout from '../../components/About/ResidencyAbout'
 
 const ResidencyOwnerHome = () => {
     return (
         <>
             <ResidencyDashboard />
-            <Gallery />
-            <Services />
-            <About />
+            <ResidencyGallery />
+            <ReasidencyService />
+            <ResidencyAbout />
         </>
     )
 }

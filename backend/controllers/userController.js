@@ -1,26 +1,43 @@
-// controllers/userController.js
-import User from '../models/User.js'; // Import your User model
-import { uploadImage } from '../config/cloudinary.js'; // Cloudinary upload function
-import bcrypt from 'bcrypt'; // Import bcrypt for password hashing
-import axios from 'axios'; // Import axios for fetching images
-import { Buffer } from 'buffer'; // Import Buffer for image conversion
+import User from '../models/User.js';
+import { uploadImage } from '../config/cloudinary.js';
+import bcrypt from 'bcrypt';
+import axios from 'axios';
+import { Buffer } from 'buffer';
+import dbConnection from '../database/dbConnection.js';
+import { getAuth } from 'firebase/auth'; // Import Firebase Auth
+
+// Ensure MongoDB is connected before handling requests
+dbConnection();
+
+export const getUserByEmail = async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.params.email });
+        if (user) {
+            res.json(user);
+        } else {
+            res.status(404).json({ error: "User not found" });
+        }
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+
 
 export const registerUser = async (req, res) => {
     try {
-        console.log("Incoming registration request body:", req.body); // Log the request body
-        console.log("Uploaded file:", req.file); // Log the uploaded file (if any)
+        console.log("Incoming registration request body:", req.body);
+        console.log("Uploaded file:", req.file);
 
         const { name, email, password, phone, userType, address, organization, dob, isGoogleSignUp } = req.body;
 
-        // Check if the user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ success: false, message: "User already exists." });
         }
 
-        let profilePicture = {}; // Initialize profilePicture object
+        let profilePicture = {};
 
-        // Function to upload profile picture to Cloudinary
         const uploadProfilePicture = async (fileBuffer) => {
             try {
                 const uploadResult = await uploadImage(fileBuffer, 'space-venture/users/profile_picture');
@@ -34,47 +51,34 @@ export const registerUser = async (req, res) => {
             }
         };
 
-        // **Separate Handling for Google and Regular Sign-Up**
-
-        // Case 1: Google Sign-Up
         if (isGoogleSignUp === 'true') {
-            // Expect the Google profile picture URL
             try {
-                const googleProfilePictureUrl = req.body.profilePicture; // Google profile picture URL
+                const googleProfilePictureUrl = req.body.profilePicture;
                 const response = await axios.get(googleProfilePictureUrl, { responseType: 'arraybuffer' });
-                const imageBuffer = Buffer.from(response.data, 'binary'); // Convert response to buffer
-                profilePicture = await uploadProfilePicture(imageBuffer); // Upload the image buffer to Cloudinary
+                const imageBuffer = Buffer.from(response.data, 'binary');
+                profilePicture = await uploadProfilePicture(imageBuffer);
             } catch (error) {
                 console.error("Error fetching or uploading Google profile picture:", error);
                 return res.status(500).json({ success: false, message: "Error uploading Google profile picture." });
             }
-        }
-
-        // Case 2: Regular Sign-Up (Form Submission)
-        else if (isGoogleSignUp === 'false') {
-            // Check if there's an uploaded profile picture
-            if (req.file) {
-                try {
-                    const imageBuffer = req.file.buffer; // Use the file buffer from multer
-                    profilePicture = await uploadProfilePicture(imageBuffer); // Upload the image to Cloudinary
-                } catch (error) {
-                    console.error("Error uploading profile picture:", error);
-                    return res.status(500).json({ success: false, message: "Error uploading profile picture." });
-                }
+        } else if (isGoogleSignUp === 'false' && req.file) {
+            try {
+                const imageBuffer = req.file.buffer;
+                profilePicture = await uploadProfilePicture(imageBuffer);
+            } catch (error) {
+                console.error("Error uploading profile picture:", error);
+                return res.status(500).json({ success: false, message: "Error uploading profile picture." });
             }
-            // No default case here
         }
 
-        // Hash the password if it's not a Google sign-up
         let hashedPassword = password;
         if (isGoogleSignUp === 'false') {
             if (!password) {
                 return res.status(400).json({ success: false, message: "Password is required." });
             }
-            hashedPassword = await bcrypt.hash(password, 10); // Hash the password
+            hashedPassword = await bcrypt.hash(password, 10);
         }
 
-        // Create the user
         const newUser = new User({
             name,
             email,
@@ -84,7 +88,7 @@ export const registerUser = async (req, res) => {
             address,
             organization,
             dob,
-            profilePicture, // This will remain empty if no profile picture is uploaded
+            profilePicture,
             isGoogleSignUp: isGoogleSignUp === 'true',
         });
 
@@ -95,5 +99,39 @@ export const registerUser = async (req, res) => {
     } catch (error) {
         console.error("Error registering user:", error);
         return res.status(500).json({ success: false, message: "An error occurred during registration." });
+    }
+};
+
+
+export const loginUser = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const userDoc = await User.findOne({ email });
+
+        if (!userDoc) {
+            return res.status(404).json({ error: "User not found in database." });
+        }
+
+        const auth = getAuth();
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+
+        if (!user.emailVerified) {
+            return res.status(403).json({ error: "Email not verified." });
+        }
+
+        res.json({
+            message: "Login successful",
+            user: {
+                uid: userDoc.uid,
+                email: userDoc.email,
+                userType: userDoc.userType,
+                name: userDoc.name,
+            },
+        });
+    } catch (error) {
+        console.error("Error during login:", error);
+        return res.status(401).json({ error: "Login failed. Please check your credentials." });
     }
 };

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import profile from '../../assets/common/logo.png';
+import profile from '../../assets/logo.png';
 import { FaBarsStaggered } from "react-icons/fa6";
 import { GrClose } from "react-icons/gr";
 import { RiArrowDownSFill, RiArrowRightSFill } from "react-icons/ri";
 
-import logo from "../../assets/common/logo.png";
+import logo from "../../assets/logo.png";
 
 const links = [
     { href: '/user-home', label: 'Home' },

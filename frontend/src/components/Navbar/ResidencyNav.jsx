@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import profile from '../../assets/common/profile.jpeg';
+// import profile from '../../assets/common/profile.jpeg';
 import { FaBarsStaggered } from "react-icons/fa6";
 import { GrClose } from "react-icons/gr";
 import { RiArrowDownSFill, RiArrowRightSFill } from "react-icons/ri";
-import logo from '../../assets/common/logo.png';
+import logo from '../../assets/logo.png';
 
 const links = [
     { href: '/residence-owner-home', label: 'Home' },
@@ -94,7 +94,7 @@ const RecidencyNav = () => {
                                 className="bg-blue-600 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-800 focus:ring-white"
                             >
                                 <span className="sr-only">Open user menu</span>
-                                <img className="h-8 w-8 rounded-full" src={profile} alt="Profile" />
+                                <img className="h-8 w-8 rounded-full" src="" alt="Profile" />
                             </button>
 
                             {isDropdownOpen && (

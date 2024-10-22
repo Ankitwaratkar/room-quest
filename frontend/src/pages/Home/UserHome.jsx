@@ -1,16 +1,16 @@
 import React from 'react'
-import UserDashboard from '../../components/client/UserDashboard'
-import Gallery from '../../components/client/Gallery';
-import Services from '../../components/client/Services';
-import About from '../../components/client/About';
+import UserDashboard from '../../components/Dashboard/UserDashboard';
+import UserGallery from '../../components/Gallery/UserGallery';
+import UserService from '../../components/Services/UserService';
+import UserAbout from '../../components/About/UserAbout';
 
 const UserHome = () => {
     return (
         <>
             <UserDashboard />
-            <Gallery />
-            <Services />
-            <About />
+            <UserGallery />
+            <UserService />
+            <UserAbout />
         </>
     )
 }

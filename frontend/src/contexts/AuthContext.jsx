@@ -1,8 +1,7 @@
-// src/contexts/AuthContext.jsx
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { auth, fireDB } from "../../firebase/firebaseConfig";
+import { auth } from "../../firebase/firebaseConfig";
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import axios from "axios";
 
 const AuthContext = createContext();
 
@@ -15,25 +14,25 @@ const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [userType, setUserType] = useState(null);
+    const [error, setError] = useState(null); // Error state
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 try {
-                    // Fetch user data from Firestore
-                    const userRef = doc(fireDB, "users", user.uid);
-                    const userDoc = await getDoc(userRef);
-
-                    if (userDoc.exists()) {
+                    const response = await axios.get(`http://localhost:5000/api/v1/user/get-user-by-email/${user.email}`);
+                    if (response.status === 200) {
+                        const data = response.data;
                         setCurrentUser(user);
-                        setUserType(userDoc.data().userType);
+                        setUserType(data.userType);
                     } else {
-                        console.error("User document does not exist in Firestore.");
+                        console.error("User document does not exist in MongoDB.");
                         setCurrentUser(null);
                         setUserType(null);
                     }
                 } catch (error) {
                     console.error("Error fetching user data:", error);
+                    setError("Failed to fetch user data.");
                     setCurrentUser(null);
                     setUserType(null);
                 }
@@ -44,34 +43,32 @@ const AuthProvider = ({ children }) => {
             setLoading(false);
         });
 
-        // Cleanup function to unsubscribe on unmount
         return () => unsubscribe();
     }, []);
 
-    // Function to handle user login
     const login = async (email, password) => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // Retrieve user document from Firestore
-            const userRef = doc(fireDB, "users", user.uid);
-            const userDoc = await getDoc(userRef);
-
-            if (userDoc.exists()) {
+            // Fetch user details from MongoDB by email
+            const response = await axios.get(`http://localhost:5000/api/v1/user/get-user-by-email/${email}`);
+            if (response.status === 200) {
+                const data = response.data;
                 setCurrentUser(user);
-                setUserType(userDoc.data().userType);
+                setUserType(data.userType);
+                return data; // Return user data for additional use
             } else {
                 console.error("User document does not exist after login.");
                 throw new Error("User document does not exist.");
             }
         } catch (error) {
             console.error("Login error:", error);
-            throw error;
+            setError("Login failed. Please check your credentials."); // Set error state
+            throw error; // Ensure the error can be caught in the component
         }
     };
 
-    // Function to handle user logout
     const logout = async () => {
         try {
             await signOut(auth);
@@ -86,15 +83,15 @@ const AuthProvider = ({ children }) => {
         currentUser,
         userType,
         login,
-        logout,  // Add logout function to the context value
+        logout,
+        error, // Include error in context
     };
 
     return (
         <AuthContext.Provider value={value}>
-            {!loading && children} {/* Ensure children render only when loading is false */}
+            {!loading && children} {/* Render children only if not loading */}
         </AuthContext.Provider>
     );
 };
 
-export { AuthProvider };
 export default AuthProvider;

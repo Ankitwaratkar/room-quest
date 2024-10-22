@@ -1,4 +1,10 @@
 import React from 'react'
+import { useAuth } from '../contexts/AuthContext';
+import UserNav from '../components/Navbar/UserNav';
+import RecidencyNav from '../components/Navbar/ResidencyNav';
+import MessNav from '../components/Navbar/MessNav';
+import { Outlet } from 'react-router-dom';
+import Footer from '../components/Footer';
 
 const Layout = () => {
     const { currentUser, userType } = useAuth(); // Get the current user and user type from the AuthContext
@@ -18,7 +24,7 @@ const Layout = () => {
             {/* This is where the child routes will be rendered */}
             <main>
                 <Outlet />
-                <Footer/>
+                <Footer />
             </main>
         </>
     );

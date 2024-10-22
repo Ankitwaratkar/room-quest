@@ -1,16 +1,16 @@
 import React from 'react'
-import Gallery from '../../components/mess/Gallery'
-import Services from '../../components/mess/Services'
-import About from '../../components/mess/About'
-import MessDashboard from '../../components/mess/MessDashboard'
+import MessDashboard from '../../components/Dashboard/MessDashboard'
+import MessGallery from '../../components/Gallery/MessGallery'
+import MessService from '../../components/Services/MessService'
+import MessAbout from '../../components/About/MessAbout'
 
 const MultiMessManagerHome = () => {
   return (
     <>
       <MessDashboard />
-      <Gallery />
-      <Services />
-      <About />
+      <MessGallery />
+      <MessService />
+      <MessAbout />
     </>
   )
 }
