@@ -15,6 +15,7 @@ import AboutUs from './pages/AboutUs';
 import AddOutlet from './components/Outlet/AddOutlet';
 import OutletInfo from './components/Outlet/OutletInfo';
 import Outlets from './components/Outlet/Outlets';
+import AddRoomie from './components/Residence/AddRoomie';
 import AddRoom from './components/Residence/AddRoom';
 
 const App = () => {
@@ -48,6 +49,7 @@ const App = () => {
               <Route path="/outlets" element={<Outlets />} />
               <Route path="/outlet/:id" element={<OutletInfo />} />
               <Route path="/add-room" element={<AddRoom />} />
+              <Route path="/add-roomie" element={<AddRoomie />} />
             </Route>
 
             <Route element={<ProtectedRoute allowedTypes={["Multi-Mess Manager"]} />}>

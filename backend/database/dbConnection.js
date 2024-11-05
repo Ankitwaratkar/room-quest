@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const dbConnection = () => {
-    mongoose.connect(process.env.MONGODB_URI, { dbName: "SPACE_VENTURE" })
+    mongoose.connect(process.env.MONGODB_URI, { dbName: "ROOM_QUEST" })
         .then(() => console.log('Connected to MongoDB'))
         .catch(err => {
             console.error(`Error connecting to MongoDB: ${err.message}`);

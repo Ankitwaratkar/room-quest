@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import UserNav from '../components/Navbar/UserNav';
 import RecidencyNav from '../components/Navbar/ResidencyNav';
 import MessNav from '../components/Navbar/MessNav';
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import Footer from '../components/Footer';
 
 const Layout = () => {

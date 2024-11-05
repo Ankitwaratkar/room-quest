@@ -1,5 +1,5 @@
 import express from 'express';
-import { addOutlet, getAllRooms, getOutletById, getOutlets, registerRoom } from '../controllers/residenceController.js';
+import { addOutlet, addRoommate, getAllRooms, getOutletById, getOutlets, registerRoom } from '../controllers/residenceController.js';
 import upload from '../config/multer.js';
 
 const router = express.Router();
@@ -10,6 +10,8 @@ router.get('/outlet/:id', getOutletById);
 router.get('/outlets', getOutlets); // Route to fetch all outlets 
 router.post('/register-room', upload.array('images', 4), registerRoom);
 router.get('/rooms', getAllRooms);
+router.post('/add-roommate', upload.single('profilePicture'), addRoommate);
+
 // You can add more outlet-related routes here, for example:
 // router.get('/api/v1/outlets', getAllOutlets); // To get all outlets
 // router.get('/api/v1/outlets/:id', getOutletById); // To get a single outlet by ID

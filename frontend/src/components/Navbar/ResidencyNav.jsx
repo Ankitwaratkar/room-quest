@@ -7,6 +7,7 @@ import logo from '../../assets/logo.png';
 const links = [
     { href: '/residence-owner-home', label: 'Home' },
     { href: '/add-outlet', label: 'Add Outlet' },
+    { href: '/add-roomie', label: 'Add Roommate' },
     { href: '/outlets', label: 'Outlets' },
     { href: '/owner-booking', label: 'Owner Bookings', hasDropdown: true },
 ];

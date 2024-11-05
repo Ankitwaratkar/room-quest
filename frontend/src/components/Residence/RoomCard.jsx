@@ -25,7 +25,7 @@ const RoomCard = ({ roomData }) => {
     }, [currentIndex]);
 
     return (
-        <div className="flex bg-white shadow-lg rounded-lg overflow-hidden w-full mb-4 max-w-5xl">
+        <div className="flex bg-white shadow-lg rounded-lg overflow-hidden w-full mb-4 max-w-5xl border-2 border-pink-100">
             {/* Image Carousel on the Left */}
             <div className="w-1/3 flex items-center justify-center">
                 <Swiper
@@ -48,7 +48,7 @@ const RoomCard = ({ roomData }) => {
                             <img
                                 src={image.url}
                                 alt={`Room Image ${index + 1}`}
-                                className="w-52 h-52 object-cover" // Set width and height to 200px with Tailwind class
+                                className="w-52 h-52 object-fit" // Set width and height to 200px with Tailwind class
                                 style={{ width: '200px', height: '200px' }} // Explicitly setting size
                             />
                         </SwiperSlide>
@@ -69,7 +69,7 @@ const RoomCard = ({ roomData }) => {
                     <div><strong>Contact:</strong>{roomData.contactNumber}</div>
                     <div><strong>Amenities:</strong>{roomData.amenities}</div>
                     <div><strong>Property Age:</strong>{roomData.propertyAge} years</div>
-                    <div><strong>Available From:</strong>{new Date(roomData.availableFrom.$date).toLocaleDateString()}</div>
+                    {/* <div><strong>Available From:</strong>{new Date(roomData.availableFrom.$date).toLocaleDateString()}</div> */}
                 </div>
             </div>
         </div>

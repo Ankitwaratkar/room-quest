@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { Outlet, validateOutlet } from '../models/Outlet.js'
 import { Room, validateRoom } from '../models/Room.js';
 import { uploadImage } from '../config/cloudinary.js';
+import { Roommate, validateRoommate } from '../models/Roommate.js';
 
 export const addOutlet = async (req, res) => {
     console.log('Incoming request body:', req.body);
@@ -167,5 +168,44 @@ export const getAllRooms = async (req, res) => {
     } catch (error) {
         console.error('Error fetching rooms:', error);
         res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+};
+
+export const addRoommate = async (req, res) => {
+    // Validate request body
+    const { error } = validateRoommate(req.body);
+    if (error) {
+        return res.status(400).json({
+            error: error.details.map((detail) => detail.message),
+        });
+    }
+
+    // Cloudinary image upload
+    let imageUploadResult;
+    try {
+        if (req.file) {
+            imageUploadResult = await uploadImage(req.file.buffer, 'space-venture/residency/roommies');
+        } else {
+            return res.status(400).json({ error: 'Profile picture is required' });
+        }
+    } catch (err) {
+        return res.status(500).json({ error: 'Failed to upload image to Cloudinary' });
+    }
+
+    // Create roommate record
+    try {
+        const roommateData = {
+            ...req.body,
+            profilePicture: {
+                url: imageUploadResult.secure_url,
+                public_id: imageUploadResult.public_id,
+            },
+        };
+
+        const roommate = new Roommate(roommateData);
+        await roommate.save();
+        res.status(201).json({ message: 'Roommate added successfully', data: roommate });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to add roommate' });
     }
 };

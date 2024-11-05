@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react'; // Import useRef for scroll detection
 import { useParams, useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -25,6 +25,9 @@ const OutletInfo = () => {
     const [outletData, setOutletData] = useState(null);
     const [rooms, setRooms] = useState([]);  // State to store rooms data
     const [loading, setLoading] = useState(true);
+    const [roomLimit, setRoomLimit] = useState(2); // Number of rooms to show initially
+
+    const roomListRef = useRef(); // Reference to the room list
 
     useEffect(() => {
         const fetchOutletData = async () => {
@@ -58,6 +61,10 @@ const OutletInfo = () => {
         fetchRoomsData();
     }, [id]);
 
+    const loadMoreRooms = () => {
+        setRoomLimit((prevLimit) => prevLimit + 2); // Load two more rooms on each call
+    };
+
     if (loading) {
         return <div className="text-center">Loading outlet information...</div>;
     }
@@ -66,7 +73,7 @@ const OutletInfo = () => {
         return <div className="text-center">Outlet not found.</div>;
     }
 
-    const { name, coordinates, phone, email, openingHours, image, reviews = [] } = outletData;
+    const { outletName, coordinates, phone, email, openingHours, image, reviews = [] } = outletData;
     const lat = coordinates.lat;
     const lng = coordinates.lng;
 
@@ -79,13 +86,13 @@ const OutletInfo = () => {
                     <div className="pr-4">
                         <img
                             src={image.url || "https://via.placeholder.com/300x300"}
-                            alt={name}
-                            className="rounded-lg shadow-md object-cover"
+                            alt={outletName}
+                            className="rounded-lg shadow-md object-fill w-fit h-fit"
                             style={{ width: '250px', height: '250px' }}
                         />
                     </div>
                     <div className="">
-                        <h2 className="text-eggplant font-bold text-2xl mb-4">{name}</h2>
+                        <h2 className="text-eggplant font-bold text-2xl mb-4">{outletName}</h2>
                         <p><strong>Location:</strong> {lat}, {lng}</p>
                         <p><strong>Phone Number:</strong> {phone}</p>
                         <p><strong>Email:</strong> {email}</p>
@@ -130,7 +137,7 @@ const OutletInfo = () => {
                                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                     />
                                     <Marker position={[lat, lng]}>
-                                        <Popup>{name}</Popup>
+                                        <Popup>{outletName}</Popup>
                                     </Marker>
                                 </MapContainer>
                             </div>
@@ -140,29 +147,48 @@ const OutletInfo = () => {
                     {selectedTab === "Rooms" && (
                         <div className="w-full">
                             <h2 className="text-eggplant font-bold text-xl mb-4">Rooms</h2>
-                            <div className="overflow-y-auto h-64"> {/* Scrollable area */}
-                                <div className="flex flex-col gap-4 w-full">
-                                    {rooms.slice(0, 2).map((room, index) => ( // Only show two rooms
-                                        <RoomCard key={index} roomData={room} />
-                                    ))}
-                                </div>
-                            </div>
+                            {rooms.length === 0 ? ( // Check if rooms array is empty
+                                <p className="text-gray-500">No rooms available.</p> // Message when there are no rooms
+                            ) : (
+                                <>
+                                    <div className="overflow-y-auto h-64"> {/* Scrollable area */}
+                                        <div className="flex flex-col gap-4 w-full">
+                                            {rooms.slice(0, roomLimit).map((room, index) => ( // Show rooms up to roomLimit
+                                                <RoomCard key={index} roomData={room} />
+                                            ))}
+                                        </div>
+                                    </div>
+                                    {roomLimit < rooms.length && ( // Only show button if there are more rooms to load
+                                        <button
+                                            className="mt-4 px-4 py-2 bg-eggplant text-white rounded-lg hover:bg-eggplant-dark transition duration-200"
+                                            onClick={loadMoreRooms}
+                                        >
+                                            Load More Rooms
+                                        </button>
+                                    )}
+                                </>
+                            )}
                         </div>
                     )}
 
                     {selectedTab === "Reviews" && (
                         <div>
                             <h2 className="text-eggplant font-bold text-xl mb-4">Reviews</h2>
-                            <ul className="space-y-4">
-                                {reviews.map((review, index) => (
-                                    <li key={index} className="border-b pb-2">
-                                        <p><strong>{review.reviewer}</strong> - Rating: {review.rating}/5</p>
-                                        <p>{review.comment}</p>
-                                    </li>
-                                ))}
-                            </ul>
+                            {reviews.length === 0 ? ( // Check if reviews array is empty
+                                <p className="text-gray-500">No reviews yet.</p> // Message when there are no reviews
+                            ) : (
+                                <ul className="space-y-4">
+                                    {reviews.map((review, index) => (
+                                        <li key={index} className="border-b pb-2">
+                                            <p><strong>{review.reviewer}</strong> - Rating: {review.rating}/5</p>
+                                            <p>{review.comment}</p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
                         </div>
                     )}
+
                 </div>
             </div>
         </div>
