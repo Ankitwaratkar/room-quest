@@ -10,9 +10,22 @@ import Layout from './pages/Layout';
 import UserHome from './pages/Home/UserHome';
 import ResidencyOwnerHome from './pages/Home/ResidencyOwnerHome';
 import MultiMessManagerHome from './pages/Home/MultiMessManagerHome';
+import AboutUs from './pages/AboutUs';
+// import MenuItem from './components/Menu/MenuItem';
+import AddOutlet from './components/Outlet/AddOutlet';
+import OutletInfo from './components/Outlet/OutletInfo';
+import Outlets from './components/Outlet/Outlets';
+import AddRoom from './components/Residence/AddRoom';
 
 const App = () => {
   return (
+    // <AuthProvider>
+    //   <Router>
+    //     <Routes>
+    //       <Route path='/' element={<OutletInfo />}></Route>
+    //     </Routes>
+    //   </Router>
+    // </AuthProvider >
     <AuthProvider>
       <Router>
         <ToastContainer />  {/* This will display toast messages on all pages */}
@@ -21,6 +34,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path='/about-us' element={<AboutUs />} />
 
           {/* Protected Routes */}
           <Route element={<Layout />}>
@@ -30,6 +44,10 @@ const App = () => {
 
             <Route element={<ProtectedRoute allowedTypes={["Residency Owner"]} />}>
               <Route path="/residence-owner-home" element={<ResidencyOwnerHome />} />
+              <Route path="/add-outlet" element={<AddOutlet />} />
+              <Route path="/outlets" element={<Outlets />} />
+              <Route path="/outlet/:id" element={<OutletInfo />} />
+              <Route path="/add-room" element={<AddRoom />} />
             </Route>
 
             <Route element={<ProtectedRoute allowedTypes={["Multi-Mess Manager"]} />}>

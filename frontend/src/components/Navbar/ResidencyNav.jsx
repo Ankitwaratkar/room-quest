@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// import profile from '../../assets/common/profile.jpeg';
 import { FaBarsStaggered } from "react-icons/fa6";
 import { GrClose } from "react-icons/gr";
 import { RiArrowDownSFill, RiArrowRightSFill } from "react-icons/ri";
@@ -7,9 +6,9 @@ import logo from '../../assets/logo.png';
 
 const links = [
     { href: '/residence-owner-home', label: 'Home' },
-    { href: '/register-room', label: 'Add Your Rooms' },
-    { href: '/services', label: 'Add Your Outlets' },
-    { href: '/owner-booking', label: 'Owner Booking' }
+    { href: '/add-outlet', label: 'Add Outlet' },
+    { href: '/outlets', label: 'Outlets' },
+    { href: '/owner-booking', label: 'Owner Bookings', hasDropdown: true },
 ];
 
 const dropdownLinks = [
@@ -46,7 +45,7 @@ const RecidencyNav = () => {
                         </div>
                         <div className="flex-shrink-0 h-24 w-32"> {/* Increased size here */}
                             <a href="/" className="text-white text-xl font-bold">
-                                <img src={logo} alt="logo" className="h-full w-full object-contain" /> {/* Adjusted the img size */}
+                                <img src={logo} alt="logo" className="h-full w-full object-contain" />
                             </a>
                         </div>
                     </div>
@@ -70,7 +69,7 @@ const RecidencyNav = () => {
                                     {/* Bookings Dropdown Menu */}
                                     {hasDropdown && isBookingsDropdownOpen && (
                                         <div className="origin-top-right absolute left-0 mt-32 ml-4 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                            {bookingsDropdownLinks.map(({ href, label }) => (
+                                            {dropdownLinks.map(({ href, label }) => (
                                                 <a
                                                     key={href}
                                                     href={href}
@@ -86,30 +85,15 @@ const RecidencyNav = () => {
                         </div>
                     </div>
 
-                    {/* Profile Dropdown */}
+                    {/* Logout Link */}
                     <div className="flex items-center">
                         <div className="relative ml-3">
-                            <button
-                                onClick={toggleDropdown}
-                                className="bg-blue-600 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-800 focus:ring-white"
+                            <a
+                                href="/logout"
+                                className="text-white bg-transparent border border-white rounded-md px-4 py-2 text-sm font-bold hover:bg-white hover:text-[#361a25] transition duration-200" // Unique styles for Logout
                             >
-                                <span className="sr-only">Open user menu</span>
-                                <img className="h-8 w-8 rounded-full" src="" alt="Profile" />
-                            </button>
-
-                            {isDropdownOpen && (
-                                <div className="origin-top-right absolute right-0 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                    {dropdownLinks.map(({ href, label }) => (
-                                        <a
-                                            key={href}
-                                            href={href}
-                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                        >
-                                            {label}
-                                        </a>
-                                    ))}
-                                </div>
-                            )}
+                                Logout
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -134,7 +118,7 @@ const RecidencyNav = () => {
                             {/* Bookings Dropdown for Mobile */}
                             {hasDropdown && isBookingsDropdownOpen && (
                                 <div className="px-2 pt-2 pb-3 space-y-1 bg-white rounded-md shadow-lg mt-2 w-48">
-                                    {bookingsDropdownLinks.map(({ href, label }) => (
+                                    {dropdownLinks.map(({ href, label }) => (
                                         <a
                                             key={href}
                                             href={href}
@@ -147,6 +131,15 @@ const RecidencyNav = () => {
                             )}
                         </div>
                     ))}
+                    {/* Logout link in mobile menu */}
+                    <div className="flex items-center">
+                        <a
+                            href="/logout"
+                            className="text-white block px-3 py-2 rounded-md text-base font-bold border border-white bg-transparent hover:bg-white hover:text-[#361a25] transition duration-200" // Unique styles for Logout in mobile
+                        >
+                            Logout
+                        </a>
+                    </div>
                 </div>
             </div>
         </nav>
