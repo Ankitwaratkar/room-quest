@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddRoomie = () => {
+    const navigate = useNavigate();
+
     const facilitiesOptions = [
         "Wifi", "Air Conditioning", "Laundry", "Parking",
         "Gym", "Swimming Pool", "Food Facility", "Garden",
@@ -81,9 +86,8 @@ const AddRoomie = () => {
 
         const dataToSubmit = new FormData();
         Object.entries(formData).forEach(([key, value]) => {
-            // No need to stringify facilities and preferences
             if (key === 'facilities' || key === 'preferences') {
-                value.forEach((item) => dataToSubmit.append(key, item)); // Append each item in the array separately
+                value.forEach((item) => dataToSubmit.append(key, item));
             } else {
                 dataToSubmit.append(key, value);
             }
@@ -101,7 +105,7 @@ const AddRoomie = () => {
             );
 
             if (response.status === 200) {
-                alert('Roommate added successfully');
+                toast.success('Roommate added successfully');
                 setFormData({
                     roommateName: '',
                     roommateAge: '',
@@ -117,217 +121,220 @@ const AddRoomie = () => {
                     profilePicture: null,
                 });
                 setImagePreview(null);
+                navigate('/'); // Redirect to home
             } else {
-                alert(response.data.message || 'Failed to add roommate');
+                toast.error(response.data.message || 'Failed to add roommate');
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Failed to add roommate');
+            toast.error('Failed to add roommate');
         }
     };
 
-
     return (
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md m-4">
-            <h2 className="text-2xl font-bold mb-4 text-center">Add Roommate</h2>
+        <>
+            <ToastContainer />
+            <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md m-4">
+                <h2 className="text-2xl font-bold mb-4 text-center">Add Roommate</h2>
 
-            {/* Name, Age, Gender */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div>
-                    <label className="block text-sm font-semibold text-eggplant mb-2">Name</label>
+                {/* Name, Age, Gender */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label className="block text-sm font-semibold text-eggplant mb-2">Name</label>
+                        <input
+                            type="text"
+                            name="roommateName"
+                            value={formData.roommateName}
+                            onChange={handleChange}
+                            required
+                            className="p-3 border border-gray-300 rounded-lg w-full"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-semibold text-eggplant mb-2">Age</label>
+                        <input
+                            type="number"
+                            name="roommateAge"
+                            value={formData.roommateAge}
+                            onChange={handleChange}
+                            required
+                            className="p-3 border border-gray-300 rounded-lg w-full"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-semibold text-eggplant mb-2">Gender</label>
+                        <select
+                            name="roommateGender"
+                            value={formData.roommateGender}
+                            onChange={handleChange}
+                            required
+                            className="p-3 border border-gray-300 rounded-lg w-full"
+                        >
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                {/* Vacancy, Price, Room Type */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label className="block text-sm font-semibold mb-2 text-eggplant">Room Type</label>
+                        <select
+                            name="roomType"
+                            value={formData.roomType}
+                            onChange={handleChange}
+                            required
+                            className="p-3 border border-gray-300 rounded-lg w-full"
+                        >
+                            <option value="">Select Room Type</option>
+                            {accommodationTypes.map((type, index) => (
+                                <option key={index} value={type}>{type}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-semibold mb-2 text-eggplant">Vacant Space For Room-mates</label>
+                        <input
+                            type="number"
+                            name="vacancy"
+                            value={formData.vacancy}
+                            onChange={handleChange}
+                            required
+                            className="p-3 border border-gray-300 rounded-lg w-full"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-semibold mb-2 text-eggplant">Price</label>
+                        <input
+                            type="number"
+                            name="price"
+                            value={formData.price}
+                            onChange={handleChange}
+                            required
+                            className="p-3 border border-gray-300 rounded-lg w-full"
+                        />
+                    </div>
+                </div>
+
+                {/* Furnishing Type, Preferences, Facilities */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label className="block text-sm font-semibold mb-2 text-eggplant">Furnishing Type</label>
+                        <select
+                            name="furnishing"
+                            value={formData.furnishing}
+                            onChange={handleChange}
+                            required
+                            className="p-3 border border-gray-300 rounded-lg w-full"
+                        >
+                            <option value="">Select Furnishing Type</option>
+                            {furnishingOptions.map((option, index) => (
+                                <option key={index} value={option}>{option}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Preferences Dropdown */}
+                    <div>
+                        <label className="block text-sm font-semibold mb-2 text-eggplant">Preferences</label>
+                        <button
+                            type="button"
+                            onClick={() => setShowPreferencesDropdown(!showPreferencesDropdown)}
+                            className="p-3 border border-gray-300 rounded-lg w-full text-left"
+                        >
+                            {formData.preferences.length > 0 ? formData.preferences.join(', ') : 'Select Preferences'}
+                        </button>
+                        {showPreferencesDropdown && (
+                            <div className="absolute bg-white border border-gray-300 rounded-md mt-1">
+                                {preferencesOptions.map((preference, index) => (
+                                    <label key={index} className="block p-2">
+                                        <input
+                                            type="checkbox"
+                                            value={preference}
+                                            checked={formData.preferences.includes(preference)}
+                                            onChange={(e) => handleCheckboxChange(e, 'preferences')}
+                                        />
+                                        {preference}
+                                    </label>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Facilities Dropdown */}
+                    <div>
+                        <label className="block text-sm font-semibold mb-2 text-eggplant">Facilities</label>
+                        <button
+                            type="button"
+                            onClick={() => setShowFacilitiesDropdown(!showFacilitiesDropdown)}
+                            className="p-3 border border-gray-300 rounded-lg w-full text-left"
+                        >
+                            {formData.facilities.length > 0 ? formData.facilities.join(', ') : 'Select Facilities'}
+                        </button>
+                        {showFacilitiesDropdown && (
+                            <div className="absolute bg-white border border-gray-300 rounded-md mt-1">
+                                {facilitiesOptions.map((facility, index) => (
+                                    <label key={index} className="block p-2">
+                                        <input
+                                            type="checkbox"
+                                            value={facility}
+                                            checked={formData.facilities.includes(facility)}
+                                            onChange={(e) => handleCheckboxChange(e, 'facilities')}
+                                        />
+                                        {facility}
+                                    </label>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Address, Room Description */}
+                <div className="mb-4">
+                    <label className="block text-sm font-semibold mb-2 text-eggplant">Address</label>
                     <input
                         type="text"
-                        name="roommateName"
-                        value={formData.roommateName}
+                        name="address"
+                        value={formData.address}
                         onChange={handleChange}
                         required
                         className="p-3 border border-gray-300 rounded-lg w-full"
                     />
                 </div>
-                <div>
-                    <label className="block text-sm font-semibold text-eggplant mb-2">Age</label>
+
+                <div className="mb-4">
+                    <label className="block text-sm font-semibold mb-2 text-eggplant">Room Description</label>
+                    <textarea
+                        name="roomDesc"
+                        value={formData.roomDesc}
+                        onChange={handleChange}
+                        required
+                        className="p-3 border border-gray-300 rounded-lg w-full"
+                        rows="4"
+                    />
+                </div>
+
+                {/* Profile Picture Upload */}
+                <div className="mb-4">
+                    <label className="block text-sm font-semibold mb-2 text-eggplant">Profile Picture</label>
                     <input
-                        type="number"
-                        name="roommateAge"
-                        value={formData.roommateAge}
+                        type="file"
+                        name="profilePicture"
+                        accept="image/*"
                         onChange={handleChange}
-                        required
                         className="p-3 border border-gray-300 rounded-lg w-full"
                     />
-                </div>
-                <div>
-                    <label className="block text-sm font-semibold text-eggplant mb-2">Gender</label>
-                    <select
-                        name="roommateGender"
-                        value={formData.roommateGender}
-                        onChange={handleChange}
-                        required
-                        className="p-3 border border-gray-300 rounded-lg w-full"
-                    >
-                        <option value="">Select Gender</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-            </div>
-
-            {/* Vacancy, Price, Room Type */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div>
-                    <label className="block text-sm font-semibold mb-2 text-eggplant">Room Type</label>
-                    <select
-                        name="roomType"
-                        value={formData.roomType}
-                        onChange={handleChange}
-                        required
-                        className="p-3 border border-gray-300 rounded-lg w-full"
-                    >
-                        <option value="">Select Room Type</option>
-                        {accommodationTypes.map((type, index) => (
-                            <option key={index} value={type}>{type}</option>
-                        ))}
-                    </select>
-                </div>
-                <div>
-                    <label className="block text-sm font-semibold mb-2 text-eggplant">Vacant Space For Room-mates</label>
-                    <input
-                        type="number"
-                        name="vacancy"
-                        value={formData.vacancy}
-                        onChange={handleChange}
-                        required
-                        className="p-3 border border-gray-300 rounded-lg w-full"
-                    />
-                </div>
-                <div>
-                    <label className="block text-sm font-semibold mb-2 text-eggplant">Price</label>
-                    <input
-                        type="number"
-                        name="price"
-                        value={formData.price}
-                        onChange={handleChange}
-                        required
-                        className="p-3 border border-gray-300 rounded-lg w-full"
-                    />
-                </div>
-            </div>
-
-            {/* Furnishing Type, Preferences, Facilities */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div>
-                    <label className="block text-sm font-semibold mb-2 text-eggplant">Furnishing Type</label>
-                    <select
-                        name="furnishing"
-                        value={formData.furnishing}
-                        onChange={handleChange}
-                        required
-                        className="p-3 border border-gray-300 rounded-lg w-full"
-                    >
-                        <option value="">Select Furnishing Type</option>
-                        {furnishingOptions.map((option, index) => (
-                            <option key={index} value={option}>{option}</option>
-                        ))}
-                    </select>
+                    {imagePreview && <img src={imagePreview} alt="Preview" className="mt-2 w-32 h-32 object-cover" />}
                 </div>
 
-                {/* Preferences Dropdown */}
-                <div>
-                    <label className="block text-sm font-semibold mb-2 text-eggplant">Preferences</label>
-                    <button
-                        type="button"
-                        onClick={() => setShowPreferencesDropdown(!showPreferencesDropdown)}
-                        className="p-3 border border-gray-300 rounded-lg w-full text-left"
-                    >
-                        {formData.preferences.length > 0 ? formData.preferences.join(', ') : 'Select Preferences'}
-                    </button>
-                    {showPreferencesDropdown && (
-                        <div className="absolute z-10 bg-white border border-gray-300 rounded-lg shadow-md mt-1">
-                            {preferencesOptions.map((option, index) => (
-                                <label key={index} className="block p-2 cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        value={option}
-                                        checked={formData.preferences.includes(option)}
-                                        onChange={(e) => handleCheckboxChange(e, 'preferences')}
-                                    />
-                                    <span className="ml-2">{option}</span>
-                                </label>
-                            ))}
-                        </div>
-                    )}
-                </div>
-
-                {/* Facilities Dropdown */}
-                <div>
-                    <label className="block text-sm font-semibold mb-2 text-eggplant">Facilities</label>
-                    <button
-                        type="button"
-                        onClick={() => setShowFacilitiesDropdown(!showFacilitiesDropdown)}
-                        className="p-3 border border-gray-300 rounded-lg w-full text-left"
-                    >
-                        {formData.facilities.length > 0 ? formData.facilities.join(', ') : 'Select Facilities'}
-                    </button>
-                    {showFacilitiesDropdown && (
-                        <div className="absolute z-10 bg-white border border-gray-300 rounded-lg shadow-md mt-1">
-                            {facilitiesOptions.map((option, index) => (
-                                <label key={index} className="block p-2 cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        value={option}
-                                        checked={formData.facilities.includes(option)}
-                                        onChange={(e) => handleCheckboxChange(e, 'facilities')}
-                                    />
-                                    <span className="ml-2">{option}</span>
-                                </label>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            {/* Address, Description, Profile Picture */}
-            <div className="mb-4">
-                <label className="block text-sm font-semibold mb-2 text-eggplant">Address</label>
-                <textarea
-                    name="address"
-                    value={formData.address}
-                    onChange={handleChange}
-                    rows="2"
-                    required
-                    className="p-3 border border-gray-300 rounded-lg w-full"
-                />
-            </div>
-
-            <div className="mb-4">
-                <label className="block text-sm font-semibold mb-2 text-eggplant">Room Description</label>
-                <textarea
-                    name="roomDesc"
-                    value={formData.roomDesc}
-                    onChange={handleChange}
-                    rows="3"
-                    required
-                    className="p-3 border border-gray-300 rounded-lg w-full"
-                />
-            </div>
-
-            <div className="mb-4">
-                <label className="block text-sm font-semibold mb-2 text-eggplant">Profile Picture</label>
-                <input
-                    type="file"
-                    name="profilePicture"
-                    onChange={handleChange}
-                    accept="image/*"
-                    required
-                    className="p-3 border border-gray-300 rounded-lg w-full"
-                />
-                {imagePreview && <img src={imagePreview} alt="Profile Preview" className="mt-2 w-24 h-24 object-cover rounded-full" />}
-            </div>
-
-            <button type="submit" className="bg-eggplant hover:bg-[#ea86ac] text-white font-bold py-2 px-4 rounded">
-                Add Roommate
-            </button>
-        </form>
+                <button type="submit" className="bg-eggplant hover:bg-[#ea86ac] text-white font-bold py-2 px-4 rounded">
+                    Add Roommate
+                </button>
+            </form>
+        </>
     );
 };
 

@@ -9,7 +9,7 @@ const links = [
     { href: '/add-outlet', label: 'Add Outlet' },
     { href: '/add-roomie', label: 'Add Roommate' },
     { href: '/outlets', label: 'Outlets' },
-    { href: '/owner-booking', label: 'Owner Bookings', hasDropdown: true },
+    // { href: '/owner-booking', label: 'Owner Bookings', hasDropdown: true },
 ];
 
 const dropdownLinks = [
@@ -18,15 +18,15 @@ const dropdownLinks = [
 
 const RecidencyNav = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [isBookingsDropdownOpen, setIsBookingsDropdownOpen] = useState(false);
+    // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    // const [isBookingsDropdownOpen, setIsBookingsDropdownOpen] = useState(false);
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-    const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
-    const toggleBookingsDropdown = (e) => {
-        e.preventDefault();
-        setIsBookingsDropdownOpen(!isBookingsDropdownOpen);
-    };
+    // const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+    // const toggleBookingsDropdown = (e) => {
+    //     e.preventDefault();
+    //     setIsBookingsDropdownOpen(!isBookingsDropdownOpen);
+    // };
 
     return (
         <nav className="bg-[#361a25]">
