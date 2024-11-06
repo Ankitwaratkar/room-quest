@@ -54,6 +54,10 @@ const App = () => {
 
             <Route element={<ProtectedRoute allowedTypes={["Multi-Mess Manager"]} />}>
               <Route path="/multi-mess-manager-home" element={<MultiMessManagerHome />} />
+              <Route path="/add-mess" element={<AddOutlet />} />
+              <Route path="/mess-outlets" element={<Outlets />} />
+              <Route path="/mess-outlet/:id" element={<OutletInfo />} />
+
             </Route>
           </Route>
 

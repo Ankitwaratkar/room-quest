@@ -7,6 +7,7 @@ import { errorMiddleware } from './middleware/errorMiddleware.js';
 import dbConnection from './database/dbConnection.js';
 import userRouter from './routes/userRouter.js';
 import residencyRouter from './routes/residencyRouter.js';
+import messRouter from './routes/messRouter.js';
 import cookieParser from 'cookie-parser';
 
 dotenv.config({ path: './config/config.env' });
@@ -32,6 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/residence', residencyRouter);
+app.use('/api/v1/mess', messRouter);
 
 // Connect to database
 dbConnection();

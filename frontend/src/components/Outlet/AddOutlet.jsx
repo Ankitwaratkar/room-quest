@@ -54,7 +54,7 @@ const AddOutlet = () => {
         const updatedLocation = `${markerPosition.lat}, ${markerPosition.lng}`;
         const updatedFormData = { ...formData, location: updatedLocation };
 
-        if (userType === 'Residency Owner' || userType === 'Multi Mess Manager') {
+        if (userType === 'Residency Owner' || userType === 'Multi-Mess Manager') {
             const outletType = userType === 'Residency Owner' ? 'Residence' : 'Mess';
             await submitOutlet(outletType, updatedFormData);
         } else {
@@ -92,6 +92,7 @@ const AddOutlet = () => {
 
             formDataToSend.append('outletType', outletType);
             formDataToSend.append('userType', userType);
+
             if (formData.image) {
                 formDataToSend.append('image', formData.image);
             }
@@ -101,11 +102,18 @@ const AddOutlet = () => {
                 console.log(key, value);
             }
 
-            const response = await axios.post('http://localhost:5000/api/v1/residence/add-outlet', formDataToSend, {
+            // Determine the API endpoint based on userType
+            const apiEndpoint = userType === 'Residency Owner'
+                ? 'http://localhost:5000/api/v1/residence/add-outlet'
+                : 'http://localhost:5000/api/v1/mess/add-mess';
+
+            // Send the request to the selected endpoint
+            const response = await axios.post(apiEndpoint, formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
+
             console.log('Outlet added:', response.data);
             alert('Outlet successfully added!');
 
@@ -136,7 +144,7 @@ const AddOutlet = () => {
         return null;
     };
 
-    if (userType !== 'Residency Owner' && userType !== 'Multi Mess Manager') {
+    if (userType !== 'Residency Owner' && userType !== 'Multi-Mess Manager') {
         return <div className="text-center text-red-500 font-bold">You do not have permission to add an outlet.</div>;
     }
 
