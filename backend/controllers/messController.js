@@ -1,6 +1,7 @@
-// import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import { uploadImage } from '../config/cloudinary.js';
 import { Outlet, validateOutlet } from '../models/Outlet.js';
+import { Menu, validateMenu } from '../models/Menu.js';
 
 export const addMess = async (req, res) => {
     console.log('Incoming request body:', req.body);
@@ -87,5 +88,48 @@ export const getMessById = async (req, res) => {
     } catch (error) {
         console.error('Error fetching outlet:', error);
         res.status(500).json({ message: 'Server error.' }); // Handle server errors
+    }
+};
+
+// console.log("Received body data:", req.body); // Check request body
+// console.log("Received file:", req.file); // Check file upload
+
+
+// Controller to handle adding a menu item
+export const addMenu = async (req, res) => {
+    try {
+        const { name, price, deliveryTime, description, rating, outletId } = req.body;
+        const file = req.file;  // The file sent from frontend via multer
+
+        // Check if all required fields are provided
+        if (!name || !price || !deliveryTime || !description || !rating || !file) {
+            return res.status(400).json({ message: 'Please fill in all fields and upload an image.' });
+        }
+
+        // Step 1: Upload the image to Cloudinary
+        const cloudinaryResult = await uploadImage(file.buffer, 'space-venture/mess/menu'); // Upload the image to Cloudinary
+        const { url, public_id } = cloudinaryResult;
+
+        // Step 2: Create the menu item in the database
+        const newMenu = new Menu({
+            outletId,
+            name,
+            price,
+            deliveryTime,
+            description,
+            rating,
+            image: {
+                url,
+                public_id
+            }
+        });
+
+        // Step 3: Save the new menu item to the database
+        await newMenu.save();
+
+        res.status(201).json({ success: true, message: 'Menu added successfully', data: newMenu });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'An error occurred while adding the menu', error: error.message });
     }
 };

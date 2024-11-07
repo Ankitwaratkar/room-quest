@@ -69,7 +69,6 @@ const RoomCard = ({ roomData }) => {
                     <div><strong>Contact:</strong>{roomData.contactNumber}</div>
                     <div><strong>Amenities:</strong>{roomData.amenities}</div>
                     <div><strong>Property Age:</strong>{roomData.propertyAge} years</div>
-                    {/* <div><strong>Available From:</strong>{new Date(roomData.availableFrom.$date).toLocaleDateString()}</div> */}
                 </div>
             </div>
         </div>

@@ -8,7 +8,8 @@ import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
-import MenuItemCard from '../Mess/MenuItemCard';
+import MenuCard from '../Menu/MenuCard';
+// import MenuItemCard from '../Mess/MenuItemCard';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -48,17 +49,17 @@ const MessOutlet = () => {
             }
         };
 
-        const fetchMenuData = async () => {
-            try {
-                const response = await axios.get('http://localhost:5000/api/v1/mess/menu');
-                setMenuItems(response.data);
-            } catch (error) {
-                console.error('Error fetching menu data:', error);
-            }
-        };
+        // const fetchMenuData = async () => {
+        //     try {
+        //         const response = await axios.get('http://localhost:5000/api/v1/mess/menu');
+        //         setMenuItems(response.data);
+        //     } catch (error) {
+        //         console.error('Error fetching menu data:', error);
+        //     }
+        // };
 
         fetchOutletData();
-        fetchMenuData();
+        // fetchMenuData();
     }, [id]);
 
     const loadMoreMenuItems = () => {
@@ -73,7 +74,7 @@ const MessOutlet = () => {
         return <div className="text-center">Outlet not found.</div>;
     }
 
-    const { outletName, coordinates, phone, email, openingHours, image, reviews = [] } = outletData;
+    const { outletName, description, coordinates, phone, email, openingHours, image, reviews = [] } = outletData;
     const lat = coordinates.lat;
     const lng = coordinates.lng;
 
@@ -95,15 +96,16 @@ const MessOutlet = () => {
                         <h2 className="text-eggplant font-bold text-2xl mb-4">{outletName}</h2>
                         <p><strong>Location:</strong> {lat}, {lng}</p>
                         <p><strong>Phone Number:</strong> {phone}</p>
+                        {description}
                         <p><strong>Email:</strong> {email}</p>
                         <p><strong>Opening Hours:</strong> {openingHours}</p>
 
-                        {userType === 'Multi Mess Manager' && (
+                        {userType === 'Multi-Mess Manager' && (
                             <button
                                 className="absolute top-0 right-0 m-4 bg-eggplant text-white px-4 py-2 rounded-lg shadow-md transition duration-200 ease-in-out transform hover:bg-eggplant-dark hover:scale-105 hover:shadow-lg"
-                                onClick={() => navigate('/add-menu-item')}
+                                onClick={() => navigate(`/add-menu/${id}`)} // Pass the outlet ID dynamically
                             >
-                                Add A Menu Item
+                                Add Menu
                             </button>
                         )}
                     </div>
@@ -125,7 +127,7 @@ const MessOutlet = () => {
                     {selectedTab === "Description" && (
                         <div>
                             <h2 className="text-eggplant font-bold text-xl mb-4">Description</h2>
-                            <p>This mess outlet offers a variety of dishes with fresh ingredients.</p>
+                            <p>{description}</p>
                             <div className="w-full h-80 relative mt-4">
                                 <MapContainer
                                     center={[lat, lng]}
@@ -151,12 +153,8 @@ const MessOutlet = () => {
                                 <p className="text-gray-500">No menu items available.</p>
                             ) : (
                                 <>
-                                    <div className="overflow-y-auto h-64">
-                                        <div className="flex flex-col gap-4 w-full">
-                                            {menuItems.slice(0, menuLimit).map((menuItem, index) => (
-                                                <MenuItemCard key={index} menuItemData={menuItem} />
-                                            ))}
-                                        </div>
+                                    <div className="min-h-screen bg-misty-rose flex items-center justify-center">
+                                        <MenuCard />
                                     </div>
                                     {menuLimit < menuItems.length && (
                                         <button

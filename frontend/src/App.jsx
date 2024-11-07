@@ -17,6 +17,8 @@ import OutletInfo from './components/Outlet/OutletInfo';
 import Outlets from './components/Outlet/Outlets';
 import AddRoomie from './components/Residence/AddRoomie';
 import AddRoom from './components/Residence/AddRoom';
+import MessOutlet from './components/Outlet/MessOutlet';
+import AddMenu from './components/Menu/AddMenu';
 
 const App = () => {
   return (
@@ -56,8 +58,8 @@ const App = () => {
               <Route path="/multi-mess-manager-home" element={<MultiMessManagerHome />} />
               <Route path="/add-mess" element={<AddOutlet />} />
               <Route path="/mess-outlets" element={<Outlets />} />
-              <Route path="/mess-outlet/:id" element={<OutletInfo />} />
-
+              <Route path="/mess-outlet/:id" element={<MessOutlet />} />
+              <Route path="/add-menu/:id" element={<AddMenu />} />
             </Route>
           </Route>
 
