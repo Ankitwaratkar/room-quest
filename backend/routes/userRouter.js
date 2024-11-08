@@ -1,5 +1,5 @@
 import express from 'express';
-import { getUserByEmail, registerUser } from '../controllers/userController.js';
+import { getUserByEmail, loginUser, registerUser } from '../controllers/userController.js';
 import upload from '../config/multer.js'; // Import multer config
 
 const router = express.Router();

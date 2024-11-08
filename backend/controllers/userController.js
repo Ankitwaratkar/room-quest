@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import axios from 'axios';
 import { Buffer } from 'buffer';
 import dbConnection from '../database/dbConnection.js';
-import { getAuth } from 'firebase/auth'; // Import Firebase Auth
+// import { getAuth } from 'firebase/auth'; // Import Firebase Auth
 
 // Ensure MongoDB is connected before handling requests
 dbConnection();
@@ -103,35 +103,35 @@ export const registerUser = async (req, res) => {
 };
 
 
-export const loginUser = async (req, res) => {
-    const { email, password } = req.body;
+// export const loginUser = async (req, res) => {
+//     const { email, password } = req.body;
 
-    try {
-        const userDoc = await User.findOne({ email });
+//     try {
+//         const userDoc = await User.findOne({ email });
 
-        if (!userDoc) {
-            return res.status(404).json({ error: "User not found in database." });
-        }
+//         if (!userDoc) {
+//             return res.status(404).json({ error: "User not found in database." });
+//         }
 
-        const auth = getAuth();
-        const userCredential = await auth.signInWithEmailAndPassword(email, password);
-        const user = userCredential.user;
+//         const auth = getAuth();
+//         const userCredential = await auth.signInWithEmailAndPassword(email, password);
+//         const user = userCredential.user;
 
-        if (!user.emailVerified) {
-            return res.status(403).json({ error: "Email not verified." });
-        }
+//         if (!user.emailVerified) {
+//             return res.status(403).json({ error: "Email not verified." });
+//         }
 
-        res.json({
-            message: "Login successful",
-            user: {
-                uid: userDoc.uid,
-                email: userDoc.email,
-                userType: userDoc.userType,
-                name: userDoc.name,
-            },
-        });
-    } catch (error) {
-        console.error("Error during login:", error);
-        return res.status(401).json({ error: "Login failed. Please check your credentials." });
-    }
-};
+//         res.json({
+//             message: "Login successful",
+//             user: {
+//                 uid: userDoc.uid,
+//                 email: userDoc.email,
+//                 userType: userDoc.userType,
+//                 name: userDoc.name,
+//             },
+//         });
+//     } catch (error) {
+//         console.error("Error during login:", error);
+//         return res.status(401).json({ error: "Login failed. Please check your credentials." });
+//     }
+// };
