@@ -8,8 +8,7 @@ import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
-import MenuCard from '../Menu/MenuCard';
-// import MenuItemCard from '../Mess/MenuItemCard';
+import Menu from '../Menu/Menu';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -27,8 +26,6 @@ const MessOutlet = () => {
     const [menuItems, setMenuItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [menuLimit, setMenuLimit] = useState(2);
-
-    const menuListRef = useRef();
 
     useEffect(() => {
         const fetchOutletData = async () => {
@@ -49,17 +46,17 @@ const MessOutlet = () => {
             }
         };
 
-        // const fetchMenuData = async () => {
-        //     try {
-        //         const response = await axios.get('http://localhost:5000/api/v1/mess/menu');
-        //         setMenuItems(response.data);
-        //     } catch (error) {
-        //         console.error('Error fetching menu data:', error);
-        //     }
-        // };
+        const fetchMenuData = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/v1/mess/menu');
+                setMenuItems(response.data);
+            } catch (error) {
+                console.error('Error fetching menu data:', error);
+            }
+        };
 
         fetchOutletData();
-        // fetchMenuData();
+        fetchMenuData();  // Fetch menu items when the component mounts
     }, [id]);
 
     const loadMoreMenuItems = () => {
@@ -154,7 +151,7 @@ const MessOutlet = () => {
                             ) : (
                                 <>
                                     <div className="min-h-screen bg-misty-rose flex items-center justify-center">
-                                        <MenuCard />
+                                        <Menu />
                                     </div>
                                     {menuLimit < menuItems.length && (
                                         <button

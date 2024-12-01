@@ -19,6 +19,10 @@ import AddRoomie from './components/Residence/AddRoomie';
 import AddRoom from './components/Residence/AddRoom';
 import MessOutlet from './components/Outlet/MessOutlet';
 import AddMenu from './components/Menu/AddMenu';
+import RoomMates from './pages/RoomMates';
+import Menu from './components/Menu/Menu';
+import RoomCard from './components/Residence/RoomCard';
+import Room from './components/Residence/Room';
 
 const App = () => {
   return (
@@ -43,6 +47,12 @@ const App = () => {
           <Route element={<Layout />}>
             <Route element={<ProtectedRoute allowedTypes={["User"]} />}>
               <Route path="/user-home" element={<UserHome />} />
+              <Route path='/room-mates' element={<RoomMates />} />
+              <Route path='/menu-items' element={<Menu />} />
+              <Route path='/rooms' element={<Room />} />
+              <Route path="/outlets/:outletType" element={<Outlets />} /> {/* Type-based route */}
+              <Route path="/resi-outlets/:id" element={<OutletInfo />} />
+              <Route path="/mess-outlets/:id" element={<MessOutlet />} />
             </Route>
 
             <Route element={<ProtectedRoute allowedTypes={["Residency Owner"]} />}>

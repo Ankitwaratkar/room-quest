@@ -3,32 +3,39 @@ import { FaBarsStaggered } from "react-icons/fa6";
 import { GrClose } from "react-icons/gr";
 import { RiArrowDownSFill, RiArrowRightSFill } from "react-icons/ri";
 import logo from '../../assets/logo.png';
+import { useNavigate } from 'react-router-dom';
 
 const links = [
     { href: '/user-home', label: 'Home' },
-    { href: '/rent-a-room', label: 'Room Search & Booking' },
-    { href: '/view-booking', label: 'My Bookings' },
-    { href: '/mess-outlets', label: "Check-out Mess Outlet's" },
-    // { href: '#', label: 'Track', hasDropdown: true },
+    { href: '#', label: 'Outlets', hasDropdown: true },
+    { href: '/rooms', label: 'Checkout Rooms' },
+    { href: '/menu-items', label: 'Food Nearby' },
     { href: '/room-mates', label: 'Find A Roommate' },
-    // { href: '/add-roommate', label: 'Add Roommate' }
 ];
 
 const dropdownLinks = [
-    { href: '/logout', label: 'Logout' }
+    { href: 'Residence', label: 'Nearby Residence' },
+    { href: 'Mess', label: "Check-out Mess Outlet's" },
 ];
 
 const UserNav = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    // const [isBookingsDropdownOpen, setIsBookingsDropdownOpen] = useState(false);
+    const [isBookingsDropdownOpen, setIsBookingsDropdownOpen] = useState(false);
+    const [selectedDropdown, setSelectedDropdown] = useState(null);
+    const navigate = useNavigate();
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-    // const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
-    // const toggleBookingsDropdown = (e) => {
-    //     e.preventDefault();
-    //     setIsBookingsDropdownOpen(!isBookingsDropdownOpen);
-    // };
+
+    const toggleBookingsDropdown = (e) => {
+        e.preventDefault();
+        setIsBookingsDropdownOpen(!isBookingsDropdownOpen);
+    };
+
+    const handleDropdownClick = (outletType) => {
+        setSelectedDropdown(outletType); // Track selected dropdown link
+        const formattedOutletType = outletType.charAt(0).toUpperCase() + outletType.slice(1); // Ensure proper casing (Residence, Mess)
+        navigate(`/outlets/${formattedOutletType}`); // Pass formatted outletType to the route
+    };
 
     return (
         <nav className="bg-[#361a25]">
@@ -75,7 +82,8 @@ const UserNav = () => {
                                             {dropdownLinks.map(({ href, label }) => (
                                                 <a
                                                     key={href}
-                                                    href={href}
+                                                    href="#"
+                                                    onClick={() => handleDropdownClick(href)} // Handle click for specific dropdown link
                                                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                                 >
                                                     {label}
@@ -124,7 +132,8 @@ const UserNav = () => {
                                     {dropdownLinks.map(({ href, label }) => (
                                         <a
                                             key={href}
-                                            href={href}
+                                            href="#"
+                                            onClick={() => handleDropdownClick(href)} // Handle click for specific dropdown link
                                             className="block text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-md"
                                         >
                                             {label}

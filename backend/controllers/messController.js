@@ -133,3 +133,22 @@ export const addMenu = async (req, res) => {
         res.status(500).json({ message: 'An error occurred while adding the menu', error: error.message });
     }
 };
+
+// Controller function to fetch all menu items
+export const getMenuItems = async (req, res) => {
+    try {
+        // Fetching all menu items from MongoDB
+        const menuItems = await Menu.find(); // You can modify this query to include filters if needed
+
+        // If no menu items are found
+        if (menuItems.length === 0) {
+            return res.status(404).json({ message: 'No menu items found' });
+        }
+
+        // Sending the fetched menu items in the response
+        res.status(200).json(menuItems);
+    } catch (error) {
+        console.error('Error fetching menu items:', error);
+        res.status(500).json({ message: 'Server Error', error: error.message });
+    }
+};

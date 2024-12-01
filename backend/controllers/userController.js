@@ -4,6 +4,9 @@ import bcrypt from 'bcrypt';
 import axios from 'axios';
 import { Buffer } from 'buffer';
 import dbConnection from '../database/dbConnection.js';
+import { Roommate } from '../models/Roommate.js';
+import { Menu } from '../models/Menu.js';
+import { Outlet } from '../models/Outlet.js';
 // import { getAuth } from 'firebase/auth'; // Import Firebase Auth
 
 // Ensure MongoDB is connected before handling requests
@@ -135,3 +138,43 @@ export const registerUser = async (req, res) => {
 //         return res.status(401).json({ error: "Login failed. Please check your credentials." });
 //     }
 // };
+
+// Controller to fetch all roommates
+export const getRoommates = async (req, res) => {
+    try {
+        const roommates = await Roommate.find();
+        res.status(200).json(roommates);
+    } catch (error) {
+        console.error("Error fetching roommates:", error);
+        res.status(500).json({ message: "Failed to fetch roommates" });
+    }
+};
+
+export const getMenuItems = async (req, res) => {
+    try {
+        const menuItems = await Menu.find(); // Fetch all menu items from the database
+        res.status(200).json(menuItems); // Send the menu items as a response
+    } catch (error) {
+        console.error('Error fetching menu items:', error);
+        res.status(500).json({ message: 'Failed to fetch menu items' });
+    }
+};
+
+export const Outlets = async (req, res) => {
+    try {
+        let outlets;
+
+        // Fetch all outlets without any filtering
+        outlets = await Outlet.find();
+
+        if (!outlets || outlets.length === 0) {
+            return res.status(404).json({ message: 'No outlets found.' });
+        }
+
+        res.status(200).json(outlets);
+    } catch (error) {
+        console.error('Error fetching outlets:', error.message);
+        res.status(500).json({ message: 'An error occurred while fetching outlets.' });
+    }
+};
+
