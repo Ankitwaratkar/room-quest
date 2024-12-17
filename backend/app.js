@@ -24,7 +24,23 @@ app.use(cors({
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
     credentials: true,
 }));
-app.use(helmet());
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"], // Default allowed sources
+                scriptSrc: ["'self'", "blob:"], // Allow blob URLs for scripts
+                connectSrc: ["'self'", process.env.FRONTEND_URL || 'http://localhost:5173'], // Allow API calls
+                objectSrc: ["'none'"], // Disallow plugins like Flash
+                imgSrc: ["'self'", "data:"], // Allow inline images
+                styleSrc: ["'self'", "'unsafe-inline'"], // Allow inline styles
+                upgradeInsecureRequests: [], // Auto-upgrade HTTP to HTTPS
+            },
+        },
+        crossOriginEmbedderPolicy: false, // Optional: Disable COEP to avoid strict errors
+    })
+);
+
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());

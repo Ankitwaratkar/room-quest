@@ -21,7 +21,6 @@ import MessOutlet from './components/Outlet/MessOutlet';
 import AddMenu from './components/Menu/AddMenu';
 import RoomMates from './pages/RoomMates';
 import Menu from './components/Menu/Menu';
-import RoomCard from './components/Residence/RoomCard';
 import Room from './components/Residence/Room';
 
 const App = () => {
