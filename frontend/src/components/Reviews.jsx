@@ -1,4 +1,8 @@
 import React from 'react';
+import pratik from '../assets/about/pratik.png'
+import piyush from '../assets/about/piyush.png'
+import tanvi from '../assets/about/tanvi.jpg'
+import sanjana from '../assets/about/sanjana.png'
 
 const Reviews = () => {
     const reviews = [
@@ -7,8 +11,8 @@ const Reviews = () => {
             title: 'RoomQuest is a game-changer!',
             description:
                 'RoomQuest offers a wide range of accommodation options, user-friendly booking, safe transactions, and dedicated customer support for a hassle-free experience.',
-            image: 'path/to/review1.jpg', // Replace with the correct image path
-            name: 'Yash Mishra',
+            image: pratik, // Replace with the correct image path
+            name: 'Pratik Bhoyar',
             profession: 'FullStack Developer',
         },
         {
@@ -16,27 +20,27 @@ const Reviews = () => {
             title: 'RoomQuest made my search for accommodation a breeze!',
             description:
                 "RoomQuest's wide array of options, user-friendly interface, secure transactions, and excellent customer support make it the top choice for accommodation seekers.",
-            image: 'path/to/review2.jpg',
-            name: 'Shubham Mahatme',
-            profession: 'Salesforce Developer',
+            image: piyush,
+            name: 'Piyush Falke',
+            profession: 'Backend Developer',
         },
         {
             id: 3,
             title: 'Mindblowing workflow',
             description:
                 'Aesthetically, the well-designed components are beautiful and will undoubtedly level up your next application.',
-            image: 'path/to/review3.jpg',
-            name: 'Parag Dahat',
-            profession: 'FullStack Developer',
+            image: tanvi,
+            name: 'Tanvi Talhan',
+            profession: 'Frontend Developer',
         },
         {
             id: 4,
             title: 'Efficient Collaborating',
             description:
                 'You have many examples that can be used to create a fast prototype for your team.',
-            image: 'path/to/review4.jpg',
-            name: 'Tejashree Mahajan',
-            profession: 'Mechanical Engineer',
+            image: sanjana,
+            name: 'Sanjana Mankar',
+            profession: 'UI/UX Developer',
         },
     ];
 
