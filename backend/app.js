@@ -29,18 +29,21 @@ app.use(
         contentSecurityPolicy: {
             directives: {
                 defaultSrc: ["'self'"], // Allow content only from your domain
-                scriptSrc: ["'self'", "blob:"], // Allow scripts from your domain and blob URLs
-                scriptSrcElem: ["'self'", "blob:"], // Explicitly allow script elements using blob
+                scriptSrc: ["'self'", "blob:"], // Allow scripts from self and blob URLs
+                scriptSrcElem: ["'self'", "blob:"], // Allow script elements explicitly
+                workerSrc: ["'self'", "blob:"], // Allow web workers with blob URLs
+                childSrc: ["'self'", "blob:"], // Allow iframes or child contexts using blobs
                 connectSrc: ["'self'", process.env.FRONTEND_URL || 'http://localhost:5173'], // Allow API calls
                 imgSrc: ["'self'", "data:"], // Allow inline images
                 styleSrc: ["'self'", "'unsafe-inline'"], // Allow inline styles
                 objectSrc: ["'none'"], // Disallow plugins
-                upgradeInsecureRequests: [], // Upgrade HTTP to HTTPS
+                upgradeInsecureRequests: [], // Enforce HTTPS
             },
         },
         crossOriginEmbedderPolicy: false, // Optional for compatibility
     })
 );
+
 
 app.use(morgan('dev'));
 app.use(cookieParser());
