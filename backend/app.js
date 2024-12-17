@@ -28,16 +28,17 @@ app.use(
     helmet({
         contentSecurityPolicy: {
             directives: {
-                defaultSrc: ["'self'"], // Default allowed sources
-                scriptSrc: ["'self'", "blob:"], // Allow blob URLs for scripts
+                defaultSrc: ["'self'"], // Allow content only from your domain
+                scriptSrc: ["'self'", "blob:"], // Allow scripts from your domain and blob URLs
+                scriptSrcElem: ["'self'", "blob:"], // Explicitly allow script elements using blob
                 connectSrc: ["'self'", process.env.FRONTEND_URL || 'http://localhost:5173'], // Allow API calls
-                objectSrc: ["'none'"], // Disallow plugins like Flash
                 imgSrc: ["'self'", "data:"], // Allow inline images
                 styleSrc: ["'self'", "'unsafe-inline'"], // Allow inline styles
-                upgradeInsecureRequests: [], // Auto-upgrade HTTP to HTTPS
+                objectSrc: ["'none'"], // Disallow plugins
+                upgradeInsecureRequests: [], // Upgrade HTTP to HTTPS
             },
         },
-        crossOriginEmbedderPolicy: false, // Optional: Disable COEP to avoid strict errors
+        crossOriginEmbedderPolicy: false, // Optional for compatibility
     })
 );
 
